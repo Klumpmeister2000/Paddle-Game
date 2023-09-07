@@ -41,6 +41,44 @@ end
 ball = Ball()
 ball:add()
 
+class("Paddle").extends(gfx.sprite)
+
+function Paddle:init()
+  -- remember to do this so the parent sprite constructor
+  -- can get its bits wired up
+  Paddle.super.init(self)
+
+  self.ySpeed = 5
+
+  width = 8
+  height = 50
+  local paddleImage = gfx.image.new(width, height)
+  gfx.pushContext(paddleImage)
+  -- (x, y, width, height, corner rounding)
+  -- note that we fill at (0,0) rather than (self.x, self.y)
+  -- since we are in a new draw context thanks to pushContext
+  gfx.fillRoundRect(0, 0, width, height, 2)
+  gfx.popContext()
+  self:setImage(paddleImage)
+  self:setCollideRect(0, 0, self:getSize())
+
+  -- 10 is arbitrary, but looks like a nice little buffer
+  self:moveTo(10, screenHeight / 2 - height)
+end
+
+function Paddle:update()
+    if playdate.buttonIsPressed(playdate.kButtonDown) then
+      self:moveBy(0, self.ySpeed)
+    end
+  
+    if playdate.buttonIsPressed(playdate.kButtonUp) then
+      self:moveBy(0, -self.ySpeed)
+    end
+  end
+
+paddle = Paddle()
+paddle:add()
+
 screenWidth = playdate.display.getWidth()
 screenHeight = playdate.display.getHeight()
 
