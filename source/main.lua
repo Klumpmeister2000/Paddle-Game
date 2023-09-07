@@ -37,10 +37,9 @@ function Ball:update()
         print(collisions[i].normal)
         if collisions[i].normal.x ~= 0 then
             self.xSpeed *= -1
-end
+        end
 
-function Ball:update()
-            self:moveBy(self.xSpeed, 0)
+    self:moveBy(self.xSpeed, 0)
 end
 
 ball = Ball()
@@ -54,4 +53,4 @@ rightWall:add()
 
 function playdate.update()
     gfx.sprite.update()
-end
+    end
