@@ -24,7 +24,7 @@ function Ball:init()
   self:setImage(ballImage)
   self:setCollideRect(0, 0, self:getSize())
 
-  self:moveTo(screenWidth / 2, screenHeight / 2)
+  self:moveTo(200, 120)
 end
 
 function Ball:update()
