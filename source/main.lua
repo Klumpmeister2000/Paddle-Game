@@ -22,6 +22,13 @@ function Ball:init()
 end
 
 function Ball:update()
+
+    if self.x + self.xSpeed >= 400 
+        then self.xSpeed *= -1
+    elseif self.x + self.xSpeed <= 0
+        then self.xSpeed *= -1
+    end
+    
     self:moveBy(self.xSpeed, 0)
 end
 
