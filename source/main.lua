@@ -38,9 +38,18 @@ function Ball:update()
         if collisions[i].normal.x ~= 0 then
             self.xSpeed *= -1
         end
-
+    
     self:moveBy(self.xSpeed, 0)
 end
+
+function Ball:init()
+    -- etc
+  
+    self:setImage(ballImage)
+    self:setCollideRect(0, 0, self:getSize())
+  
+    self:moveTo(200, 120)
+  end
 
 ball = Ball()
 ball:add()
@@ -53,4 +62,4 @@ rightWall:add()
 
 function playdate.update()
     gfx.sprite.update()
-    end
+end
