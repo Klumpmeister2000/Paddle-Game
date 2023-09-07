@@ -4,6 +4,9 @@ import "CoreLibs/sprites"
 
 gfx = playdate.graphics
 
+screenWidth = playdate.display.getWidth()
+screenHeight = playdate.display.getHeight()
+
 bounceSound = playdate.sound.synth.new(playdate.sound.kWaveSine)
 bounceSound:setADSR(0.1, 0.1, 0.1, 0)
 
@@ -66,21 +69,8 @@ function Paddle:init()
   self:moveTo(10, screenHeight / 2 - height)
 end
 
-function Paddle:update()
-    if playdate.buttonIsPressed(playdate.kButtonDown) then
-      self:moveBy(0, self.ySpeed)
-    end
-  
-    if playdate.buttonIsPressed(playdate.kButtonUp) then
-      self:moveBy(0, -self.ySpeed)
-    end
-  end
-
 paddle = Paddle()
 paddle:add()
-
-screenWidth = playdate.display.getWidth()
-screenHeight = playdate.display.getHeight()
 
 leftWall = gfx.sprite.addEmptyCollisionSprite(-5, 0, 5, screenHeight)
 leftWall:add()
@@ -125,6 +115,16 @@ function Ball:update()
         bounceSound:playNote("G4", 1, 1)
         self.ySpeed *= -1
       end
+    end
+  end
+
+  function Paddle:update()
+    if playdate.buttonIsPressed(playdate.kButtonDown) then
+      self:moveBy(0, self.ySpeed)
+    end
+  
+    if playdate.buttonIsPressed(playdate.kButtonUp) then
+      self:moveBy(0, -self.ySpeed)
     end
   end
 
