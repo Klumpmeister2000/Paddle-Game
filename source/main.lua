@@ -10,6 +10,7 @@ function Ball:init()
   Ball.super.init(self)
 
   self.xSpeed = 5
+  self.ySpeed = 6
 
   radius = 5
   local ballImage = gfx.image.new(2 * radius, 2 * radius)
@@ -43,6 +44,12 @@ leftWall:add()
 
 rightWall = gfx.sprite.addEmptyCollisionSprite(400, 0, 5, 240)
 rightWall:add()
+
+topWall = gfx.sprite.addEmptyCollisionSprite(0, -5, 400, 5)
+topWall:add()
+
+bottomWall = gfx.sprite.addEmptyCollisionSprite(0, 240, 400, 5)
+bottomWall:add()
 
 function Ball:update()
     -- returns actualX, actualY, a list of collisions, and the
