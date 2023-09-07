@@ -24,7 +24,6 @@ function Ball:init()
   self:moveTo(200, 120)
 end
 
-
 function Ball:update()
 
     if self.x + self.xSpeed >= 400 
@@ -62,7 +61,7 @@ function Ball:update()
     --
     -- We're only going to use the list of collisions right now,
     -- so the convention in Lua is to use _ for unused variables
-    local _, _, collisions, _ = self:moveWithCollisions(self.x + self.xSpeed, self.y)
+    local _, _, collisions, _ = self:moveWithCollisions(self.x + self.xSpeed, self.y + self.ySpeed)
   
     -- In Lua, #collection gives you the length of the object,
     -- similar to collection.length in other languages
