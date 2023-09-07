@@ -19,6 +19,10 @@ function Ball:init()
   self:moveTo(200, 120)
 end
 
+function Ball:update()
+    self:moveBy(1,0)
+end
+
 ball = Ball()
 ball:add()
 
