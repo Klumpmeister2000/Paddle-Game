@@ -28,13 +28,29 @@ function Ball:update()
     elseif self.x + self.xSpeed <= 0 
         then
         self.xSpeed *= -1
+        end
 end
 
-self:moveBy(self.xSpeed, 0)
+function Ball:update()
+    local _, _, collisions, _ = self:movewithCollisions(self.x + self.xSpeed, self.y)
+    for i = 1, #collisions do
+        print(collisions[i].normal)
+        if collisions[i].normal.x ~= 0 then
+            self.xSpeed *= -1
+end
+
+function Ball:update()
+            self:moveBy(self.xSpeed, 0)
 end
 
 ball = Ball()
 ball:add()
+
+leftWall = gfx.sprite.addEmptyCollisionSprite(-5, 0, 5, 240)
+leftWall:add()
+
+rightWall= gfx.sprite.addEmptyCollisionSprite(400, 0, 5, 240)
+rightWall:add()
 
 function playdate.update()
     gfx.sprite.update()
