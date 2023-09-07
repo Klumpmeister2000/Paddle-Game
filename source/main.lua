@@ -21,7 +21,7 @@ function Ball:init()
   self:setImage(ballImage)
   self:setCollideRect(0, 0, self:getSize())
 
-  self:moveTo(200, 120)
+  self:moveTo(screenWidth / 2, screenHeight / 2)
 end
 
 function Ball:update()
@@ -38,16 +38,19 @@ end
 ball = Ball()
 ball:add()
 
-leftWall = gfx.sprite.addEmptyCollisionSprite(-5, 0, 5, 240)
+screenWidth = playdate.display.getWidth()
+screenHeight = playdate.display.getHeight()
+
+leftWall = gfx.sprite.addEmptyCollisionSprite(-5, 0, 5, screenHeight)
 leftWall:add()
 
-rightWall = gfx.sprite.addEmptyCollisionSprite(400, 0, 5, 240)
+rightWall = gfx.sprite.addEmptyCollisionSprite(screenWidth, 0, 5, screenHeight)
 rightWall:add()
 
-topWall = gfx.sprite.addEmptyCollisionSprite(0, -5, 400, 5)
+topWall = gfx.sprite.addEmptyCollisionSprite(0, -5, screenWidth, 5)
 topWall:add()
 
-bottomWall = gfx.sprite.addEmptyCollisionSprite(0, 240, 400, 5)
+bottomWall = gfx.sprite.addEmptyCollisionSprite(0, screenHeight, screenWidth, 5)
 bottomWall:add()
 
 function Ball:update()
