@@ -4,6 +4,9 @@ import "CoreLibs/sprites"
 
 gfx = playdate.graphics
 
+bounceSound = playdate.sound.synth.new(playdate.sound.kWaveSine)
+bounceSound:setADSR(0.1, 0.1, 0.1, 0)
+
 class("Ball").extends(gfx.sprite)
 
 function Ball:init()
@@ -22,17 +25,6 @@ function Ball:init()
   self:setCollideRect(0, 0, self:getSize())
 
   self:moveTo(screenWidth / 2, screenHeight / 2)
-end
-
-function Ball:update()
-
-    if self.x + self.xSpeed >= 400 
-        then self.xSpeed *= -1
-    elseif self.x + self.xSpeed <= 0
-        then self.xSpeed *= -1
-    end
-    
-    self:moveBy(self.xSpeed, 0)
 end
 
 ball = Ball()
@@ -77,9 +69,11 @@ function Ball:update()
       -- also ~= is "not equals" in Lua, similar to != in
       -- most other languages 
       if collisions[i].normal.x ~= 0 then
+        bounceSound:playNote("G4", 1, 1)
         self.xSpeed *= -1
       end
       if collisions[i].normal.y ~= 0 then
+        bounceSound:playNote("G4", 1, 1)
         self.ySpeed *= -1
       end
     end
