@@ -32,15 +32,33 @@ function Ball:update()
 end
 
 function Ball:update()
-    local _, _, collisions, _ = self:movewithCollisions(self.x + self.xSpeed, self.y)
+    -- returns actualX, actualY, a list of collisions, and the
+    -- length of the set of collisions
+    --
+    -- actualX and actualY represent where the sprite ended up
+    -- after the collisions were applied and it was moved outside
+    -- the bounds of any sprites it collided with. But for now
+    -- we only care if it needs to bounce or not. :)
+    --
+    -- We're only going to use the list of collisions right now,
+    -- so the convention in Lua is to use _ for unused variables
+    local _, _, collisions, _ = self:moveWithCollisions(self.x + self.xSpeed, self.y)
+  
+    -- In Lua, #collection gives you the length of the object,
+    -- similar to collection.length in other languages
     for i = 1, #collisions do
-        print(collisions[i].normal)
-        if collisions[i].normal.x ~= 0 then
-            self.xSpeed *= -1
-        end
-    
-    self:moveBy(self.xSpeed, 0)
-end
+      -- just for testing purposes
+      print(collisions[i].normal)
+      -- if the ball should bounce horizontally, then invert
+      -- its xSpeed
+      --
+      -- also ~= is "not equals" in Lua, similar to != in
+      -- most other languages 
+      if collisions[i].normal.x ~= 0 then
+        self.xSpeed *= -1
+      end
+    end
+  end
 
 function Ball:init()
     -- etc
@@ -49,7 +67,7 @@ function Ball:init()
     self:setCollideRect(0, 0, self:getSize())
   
     self:moveTo(200, 120)
-  end
+end
 
 ball = Ball()
 ball:add()
