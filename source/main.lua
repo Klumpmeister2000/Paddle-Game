@@ -126,6 +126,13 @@ function Ball:update()
     if playdate.buttonIsPressed(playdate.kButtonUp) then
       self:moveWithCollisions(self.x, self.y - self.ySpeed)
     end
+  
+  -- returns [change, acceleratedChange], where acceleratedChange
+  -- has a multiplier if you are turning the crank really quickly
+  local crankChange, _ = playdate.getCrankChange()
+    if crankChange ~= 0 then
+    self:moveWithCollisions(self.x, self.y + crankChange)
+    end
   end
 
 function playdate.update()
