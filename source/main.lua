@@ -20,23 +20,20 @@ function Ball:init()
   self:setCollideRect(0, 0, self:getSize())
   self:moveTo(200, 120)
   self.xSpeed = 5
-  
+  self.ySpeed = 6
+
 end
 
 function Ball:update()
+    local _, _, collisions, _ = self:moveWithCollisions(self.x + self.xSpeed, self.y + self.ySpeed)
     if self.x + self.xSpeed >= 400 
         then
         self.xSpeed *= -1
     elseif self.x + self.xSpeed <= 0 
         then
         self.xSpeed *= -1
-        end
-end
+    end
 
-  
-  function Ball:update()
-    local _, _, collisions, _ = self:moveWithCollisions(self.x + self.xSpeed, self.y + self.ySpeed)
-  
     for i = 1, #collisions do
       if collisions[i].normal.x ~= 0 then
         self.xSpeed *= -1
@@ -44,9 +41,8 @@ end
   
       if collisions[i].normal.y ~= 0 then
         self.ySpeed *= -1
-      end
-    end
-  end
+end
+
 
 function Ball:init()
     -- etc
