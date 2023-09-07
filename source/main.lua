@@ -77,6 +77,9 @@ function Ball:update()
       if collisions[i].normal.x ~= 0 then
         self.xSpeed *= -1
       end
+      if collisions[i].normal.y ~= 0 then
+        self.ySpeed *= -1
+      end
     end
   end
 
