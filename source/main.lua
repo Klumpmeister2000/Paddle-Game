@@ -27,6 +27,17 @@ function Ball:init()
   self:moveTo(screenWidth / 2, screenHeight / 2)
 end
 
+function Ball:update()
+
+    if self.x + self.xSpeed >= 400 
+        then self.xSpeed *= -1
+    elseif self.x + self.xSpeed <= 0
+        then self.xSpeed *= -1
+    end
+    
+    self:moveBy(self.xSpeed, 0)
+end
+
 ball = Ball()
 ball:add()
 
