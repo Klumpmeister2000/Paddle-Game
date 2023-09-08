@@ -10,6 +10,9 @@ screenHeight = playdate.display.getHeight()
 bounceSound = playdate.sound.synth.new(playdate.sound.kWaveSine)
 bounceSound:setADSR(0.1, 0.1, 0.1, 0)
 
+leftScore = 0
+rightScore = 0
+
 class("Ball").extends(gfx.sprite)
 
 function Ball:init()
@@ -139,6 +142,15 @@ function Ball:update()
     end
   end
 
-function playdate.update()
-  gfx.sprite.update()
-end
+  function playdate.update()
+    gfx.sprite.update()
+  
+    -- drawTextAligned(text, x, y, alignment)
+    --
+    -- We want to draw at the top-center, so we do
+    -- x = screenWidth / 2, then move 5 pixels from the top
+    -- for a little buffer.
+    --
+    -- Note that .. is used for string concatenation in Lua
+    gfx.drawTextAligned(leftScore .. " : " .. rightScore, screenWidth / 2, 5, kTextAlignment.center)
+  end
