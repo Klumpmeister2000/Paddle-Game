@@ -102,8 +102,14 @@ function Ball:update()
   for i = 1, #collisions do
     if collisions[i].other:getTag() == kLeftWallTag then
       rightScore += 1
+      -- FYI: You can update the code in init() to this
+      -- instead of self:moveTo(200, 120) if you want
+      self:moveTo(screenWidth / 2, screenHeight / 2)
+      return
     elseif collisions[i].other:getTag() == kRightWallTag then
       leftScore += 1
+      self:moveTo(screenWidth / 2, screenHeight / 2)
+      return
     end
 
     if collisions[i].normal.x ~= 0 then
