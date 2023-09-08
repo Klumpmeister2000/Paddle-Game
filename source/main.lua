@@ -79,10 +79,15 @@ leftPaddle:add()
 rightPaddle = Paddle(screenWidth - 10)
 rightPaddle:add()
 
+kLeftWallTag = 1
+kRightWallTag = 2
+
 leftWall = gfx.sprite.addEmptyCollisionSprite(-5, 0, 5, screenHeight)
+leftWall:setTag(kLeftWallTag)
 leftWall:add()
 
 rightWall = gfx.sprite.addEmptyCollisionSprite(screenWidth, 0, 5, screenHeight)
+rightWall:setTag(kRightWallTag)
 rightWall:add()
 
 topWall = gfx.sprite.addEmptyCollisionSprite(0, -5, screenWidth, 5)
@@ -92,38 +97,26 @@ bottomWall = gfx.sprite.addEmptyCollisionSprite(0, screenHeight, screenWidth, 5)
 bottomWall:add()
 
 function Ball:update()
-    -- returns actualX, actualY, a list of collisions, and the
-    -- length of the set of collisions
-    --
-    -- actualX and actualY represent where the sprite ended up
-    -- after the collisions were applied and it was moved outside
-    -- the bounds of any sprites it collided with. But for now
-    -- we only care if it needs to bounce or not. :)
-    --
-    -- We're only going to use the list of collisions right now,
-    -- so the convention in Lua is to use _ for unused variables
-    local _, _, collisions, _ = self:moveWithCollisions(self.x + self.xSpeed, self.y + self.ySpeed)
-  
-    -- In Lua, #collection gives you the length of the object,
-    -- similar to collection.length in other languages
-    for i = 1, #collisions do
-      -- just for testing purposes
-      print(collisions[i].normal)
-      -- if the ball should bounce horizontally, then invert
-      -- its xSpeed
-      --
-      -- also ~= is "not equals" in Lua, similar to != in
-      -- most other languages 
-      if collisions[i].normal.x ~= 0 then
-        bounceSound:playNote("G4", 1, 1)
-        self.xSpeed *= -1
-      end
-      if collisions[i].normal.y ~= 0 then
-        bounceSound:playNote("G4", 1, 1)
-        self.ySpeed *= -1
-      end
+  local _, _, collisions, _ = self:moveWithCollisions(self.x + self.xSpeed, self.y + self.ySpeed)
+
+  for i = 1, #collisions do
+    if collisions[i].other:getTag() == kLeftWallTag then
+      rightScore += 1
+    elseif collisions[i].other:getTag() == kRightWallTag then
+      leftScore += 1
+    end
+
+    if collisions[i].normal.x ~= 0 then
+      bounceSound:playNote("G4", 1, 0.2)
+      self.xSpeed *= -1
+    end
+
+    if collisions[i].normal.y ~= 0 then
+      bounceSound:playNote("G4", 1, 0.2)
+      self.ySpeed *= -1
     end
   end
+end
 
   function Paddle:update()
     if playdate.buttonIsPressed(playdate.kButtonDown) then
