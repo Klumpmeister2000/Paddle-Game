@@ -150,7 +150,14 @@ end
   
   function playdate.update()
     if isGameOver() then
-      gfx.drawTextAligned("Good game, pal!", screenWidth / 2, screenHeight / 2, kTextAlignment.center)
+      gfx.drawTextAligned("Good game, pal!", screenWidth / 2, screenHeight / 2 - 25, kTextAlignment.center)
+      gfx.drawTextAligned("Press Ⓐ to play again", screenWidth / 2, screenHeight / 2, kTextAlignment.center)
+  
+      if playdate.buttonIsPressed(playdate.kButtonA) then
+        -- this causes isGameOver() to start returning false again
+        leftScore = 0
+        rightScore = 0
+      end
     else
       gfx.sprite.update()
   
