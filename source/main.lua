@@ -124,6 +124,8 @@ function Ball:update()
   end
 end
 
+
+
   function Paddle:update()
     if playdate.buttonIsPressed(playdate.kButtonDown) then
       self:moveWithCollisions(self.x, self.y + self.ySpeed)
@@ -141,15 +143,17 @@ end
     end
   end
 
-  function playdate.update()
-    gfx.sprite.update()
+  function isGameOver()
+    local winningScore = 5
+    return leftScore >= winningScore or rightScore >= winningScore
+  end
   
-    -- drawTextAligned(text, x, y, alignment)
-    --
-    -- We want to draw at the top-center, so we do
-    -- x = screenWidth / 2, then move 5 pixels from the top
-    -- for a little buffer.
-    --
-    -- Note that .. is used for string concatenation in Lua
-    gfx.drawTextAligned(leftScore .. " : " .. rightScore, screenWidth / 2, 5, kTextAlignment.center)
+  function playdate.update()
+    if isGameOver() then
+      gfx.drawTextAligned("Good game, pal!", screenWidth / 2, screenHeight / 2, kTextAlignment.center)
+    else
+      gfx.sprite.update()
+  
+      gfx.drawTextAligned(leftScore .. " : " .. rightScore, screenWidth / 2, 5, kTextAlignment.center)
+    end
   end
