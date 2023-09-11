@@ -1,166 +1,17 @@
 import "CoreLibs/object"
 import "CoreLibs/graphics"
 import "CoreLibs/sprites"
+import "Corelibs/timer"
 
-gfx = playdate.graphics
+import "player"
 
-screenWidth = playdate.display.getWidth()
-screenHeight = playdate.display.getHeight()
+local pd <const> = playdate
+local gfx <const> = playdate.graphics
 
-bounceSound = playdate.sound.synth.new(playdate.sound.kWaveSine)
-bounceSound:setADSR(0.1, 0.1, 0.1, 0)
+Player(30, 120)
 
-leftScore = 0
-rightScore = 0
-
-class("Ball").extends(gfx.sprite)
-
-function Ball:init()
-  Ball.super.init(self)
-
-  self.xSpeed = 5
-  self.ySpeed = 6
-
-  radius = 5
-  local ballImage = gfx.image.new(2 * radius, 2 * radius)
-  gfx.pushContext(ballImage)
-  gfx.fillCircleAtPoint(radius, radius, radius)
-  gfx.popContext()
-
-  self:setImage(ballImage)
-  self:setCollideRect(0, 0, self:getSize())
-
-  self:moveTo(200, 120)
+function pd.update()
+  gfx.sprite.update()
+  pd.timers.updateTimers()
 end
 
-function Ball:update()
-
-    if self.x + self.xSpeed >= 400 
-        then self.xSpeed *= -1
-    elseif self.x + self.xSpeed <= 0
-        then self.xSpeed *= -1
-    end
-    
-    self:moveBy(self.xSpeed, 0)
-end
-
-ball = Ball()
-ball:add()
-
-class("Paddle").extends(gfx.sprite)
-
-function Paddle:init(xPosition)
-  -- remember to do this so the parent sprite constructor
-  -- can get its bits wired up
-  Paddle.super.init(self)
-
-  self.ySpeed = 5
-
-  width = 8
-  height = 50
-  local paddleImage = gfx.image.new(width, height)
-  gfx.pushContext(paddleImage)
-  -- (x, y, width, height, corner rounding)
-  -- note that we fill at (0,0) rather than (self.x, self.y)
-  -- since we are in a new draw context thanks to pushContext
-  gfx.fillRoundRect(0, 0, width, height, 2)
-  gfx.popContext()
-  self:setImage(paddleImage)
-  self:setCollideRect(0, 0, self:getSize())
-
-  -- 10 is arbitrary, but looks like a nice little buffer
-  self:moveTo(xPosition, screenHeight / 2 )
-
-end
-
-leftPaddle = Paddle(10)
-leftPaddle:add()
-
-rightPaddle = Paddle(screenWidth - 10)
-rightPaddle:add()
-
-kLeftWallTag = 1
-kRightWallTag = 2
-
-leftWall = gfx.sprite.addEmptyCollisionSprite(-5, 0, 5, screenHeight)
-leftWall:setTag(kLeftWallTag)
-leftWall:add()
-
-rightWall = gfx.sprite.addEmptyCollisionSprite(screenWidth, 0, 5, screenHeight)
-rightWall:setTag(kRightWallTag)
-rightWall:add()
-
-topWall = gfx.sprite.addEmptyCollisionSprite(0, -5, screenWidth, 5)
-topWall:add()
-
-bottomWall = gfx.sprite.addEmptyCollisionSprite(0, screenHeight, screenWidth, 5)
-bottomWall:add()
-
-function Ball:update()
-  local _, _, collisions, _ = self:moveWithCollisions(self.x + self.xSpeed, self.y + self.ySpeed)
-
-  for i = 1, #collisions do
-    if collisions[i].other:getTag() == kLeftWallTag then
-      rightScore += 1
-      -- FYI: You can update the code in init() to this
-      -- instead of self:moveTo(200, 120) if you want
-      self:moveTo(screenWidth / 2, screenHeight / 2)
-      return
-    elseif collisions[i].other:getTag() == kRightWallTag then
-      leftScore += 1
-      self:moveTo(screenWidth / 2, screenHeight / 2)
-      return
-    end
-
-    if collisions[i].normal.x ~= 0 then
-      bounceSound:playNote("G4", 1, 0.2)
-      self.xSpeed *= -1
-    end
-
-    if collisions[i].normal.y ~= 0 then
-      bounceSound:playNote("G4", 1, 0.2)
-      self.ySpeed *= -1
-    end
-  end
-end
-
-
-
-  function Paddle:update()
-    if playdate.buttonIsPressed(playdate.kButtonDown) then
-      self:moveWithCollisions(self.x, self.y + self.ySpeed)
-    end
-  
-    if playdate.buttonIsPressed(playdate.kButtonUp) then
-      self:moveWithCollisions(self.x, self.y - self.ySpeed)
-    end
-  
-  -- returns [change, acceleratedChange], where acceleratedChange
-  -- has a multiplier if you are turning the crank really quickly
-  local crankChange, _ = playdate.getCrankChange()
-    if crankChange ~= 0 then
-    self:moveWithCollisions(self.x, self.y + crankChange)
-    end
-  end
-
-  function isGameOver()
-    local winningScore = 5
-    return leftScore >= winningScore or rightScore >= winningScore
-  end
-  
-  function playdate.update()
-    if isGameOver() then
-      gfx.drawTextAligned("Good game, pal!", screenWidth / 2, screenHeight / 2 - 25, kTextAlignment.center)
-      gfx.drawTextAligned("Press Ⓐ to play again", screenWidth / 2, screenHeight / 2, kTextAlignment.center)
-  
-      if playdate.buttonIsPressed(playdate.kButtonA) then
-        -- this causes isGameOver() to start returning false again
-        leftScore = 0
-        rightScore = 0
-      end
-    else
-      gfx.sprite.update()
-  
-      gfx.drawTextAligned(leftScore .. " : " .. rightScore, screenWidth / 2, 5, kTextAlignment.center)
-    end
-  end
