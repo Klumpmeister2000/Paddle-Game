@@ -1,7 +1,7 @@
-name=Klump's Paddle Game
+name=Klump's shooter
 author=Klumpmeister
-description=Klumpmeister's first playdate game
+description=Klumpmeister's second playdate game
 bundleID=com.domain.GameName
 version=1.0
 imagePath=SystemAssets/
-buildNumber=58
+buildNumber=2

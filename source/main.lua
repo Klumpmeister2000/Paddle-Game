@@ -12,6 +12,6 @@ Player(30, 120)
 
 function pd.update()
   gfx.sprite.update()
-  pd.timers.updateTimers()
+  pd.timer.updateTimers()
 end
 
